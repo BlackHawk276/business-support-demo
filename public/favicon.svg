@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle with Gradient -->
+  <circle cx="32" cy="32" r="32" fill="url(#gradient)"/>
+
+  <!-- Letter B -->
+  <path d="M20 16H32C36.4183 16 40 19.5817 40 24C40 26.5 38.8 28.7 37 30C39.2 31.3 40.5 33.7 40.5 36.5C40.5 41.1944 36.6944 45 32 45H20V16ZM26 28H31C33.2091 28 35 26.2091 35 24C35 21.7909 33.2091 20 31 20H26V28ZM26 41H32C34.2091 41 36 39.2091 36 37C36 34.7909 34.2091 33 32 33H26V41Z" fill="white"/>
+
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#1E40AF"/>
+    </linearGradient>
+  </defs>
+</svg>
