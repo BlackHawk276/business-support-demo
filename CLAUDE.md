@@ -337,12 +337,157 @@ Dashboard routes (`/dashboard/*`):
 
 8. **Activity Feed live updates**: Toggle-able simulation that adds new activities every 15 seconds
 
-## Known Limitations & Future Considerations
+## AI Assistant Feature
 
-- No backend/API integration (by design - demo app)
+**New Addition**: Simulated AI-powered chat assistant for natural language data queries.
+
+### Architecture
+
+```
+lib/ai-knowledge-base.ts    # Mock AI response system with pattern matching
+components/ai-assistant.tsx  # Floating chat UI component
+```
+
+### How It Works
+
+1. **Pattern Matching**: Uses keyword detection to match questions to pre-written responses
+2. **Context Awareness**: Detects current page pathname to provide relevant suggestions
+3. **Simulated Thinking**: 1-2 second delay with typing animation for realistic AI experience
+4. **No API Calls**: Entirely client-side simulation using pre-written responses
+
+### Response System Pattern
+
+```typescript
+export function getAIResponse(question: string, context: string): AIResponse {
+  const q = question.toLowerCase()
+
+  if (q.includes("outstanding") || q.includes("₹27.5")) {
+    return {
+      answer: "Detailed explanation with breakdown...",
+      suggestions: ["Follow-up question 1?", "Follow-up question 2?"]
+    }
+  }
+  // 20+ more patterns for different metrics
+}
+```
+
+### Context-Aware Suggestions
+
+```typescript
+export function getContextualQuestions(pathname: string): string[] {
+  if (pathname.includes("/dashboard/analytics")) {
+    return ["Why is revenue ₹45.2L?", "Which category is performing best?"]
+  }
+  // Different suggestions for each page
+}
+```
+
+### Adding New AI Responses
+
+To add responses for new metrics or pages:
+
+1. Add pattern matching in `getAIResponse()`:
+   ```typescript
+   if (q.includes("your_keyword") || q.includes("₹value")) {
+     return {
+       answer: `Multi-line explanation with:
+
+       • Bullet points
+       • Breakdown of numbers
+
+       Recommendations:
+       1. Actionable item 1
+       2. Actionable item 2`,
+       suggestions: ["Related question 1?", "Related question 2?"]
+     }
+   }
+   ```
+
+2. Add page-specific suggestions in `getContextualQuestions()`:
+   ```typescript
+   if (pathname.includes("/dashboard/your-page")) {
+     return ["Question 1?", "Question 2?", "Question 3?"]
+   }
+   ```
+
+### UI Components
+
+- **Floating Button**: Purple gradient button in bottom-right corner with green pulse
+- **Chat Panel**: Modal overlay with gradient header, scrollable messages, input field
+- **Message Types**: User (blue, right) and Assistant (white, left) with avatars
+- **Typing Animation**: Three bouncing dots while "thinking"
+- **Suggestions**: Clickable button pills for quick questions
+
+## Demo Features
+
+### 1. Demo Banner
+- Yellow banner at top explaining demo mode
+- Dismissible (stored in localStorage)
+- Component: `components/demo-banner.tsx`
+
+### 2. Demo Controls (Hidden)
+- Press **Cmd+Shift+D** to toggle
+- Buttons to:
+  - Add random activity
+  - Simulate payment received
+  - Send test reminder
+  - Reset demo (clear localStorage)
+- Component: `components/demo-controls.tsx`
+
+### 3. Toast Notifications
+- Uses Sonner library
+- Shows feedback for all actions:
+  - Logout: "Logged out successfully"
+  - AI response: "AI Assistant responded"
+  - Demo actions: Various success messages
+- Configured in `app/layout.tsx`
+
+### 4. Loading States
+- 600ms skeleton screens on page load
+- Components in `components/ui/skeleton-*.tsx`:
+  - `skeleton-card.tsx` - KPI card loading state
+  - `skeleton-table.tsx` - Table loading state
+  - `skeleton-chart.tsx` - Chart loading state
+  - `skeleton-activity.tsx` - Activity feed loading state
+
+### 5. Page Transitions
+- Smooth fade-in/slide-up animations
+- Component: `components/page-transition.tsx`
+- Wraps all dashboard page content
+
+### 6. Help Menu
+- In topbar next to notifications
+- Shows keyboard shortcuts, support info, about
+- Component: `components/dashboard/help-menu.tsx`
+
+## Completed Pages (All 10)
+
+1. **Dashboard** (`/dashboard`) - KPIs, charts, activity feed ✅
+2. **Activities** (`/dashboard/activities`) - Activity tracking ✅
+3. **Payments** (`/dashboard/payments`) - Payment aging, reminders ✅
+4. **Catalog** (`/dashboard/catalog`) - Products with variants ✅
+5. **Schemes** (`/dashboard/schemes`) - Promotional schemes ✅
+6. **Customers** (`/dashboard/customers`) - Customer database with quick view ✅
+7. **Analytics** (`/dashboard/analytics`) - Charts, metrics, reports ✅
+8. **Settings** (`/dashboard/settings`) - 7 sections (company, team, integrations, etc.) ✅
+9. **Login** (`/login`) - Mock authentication ✅
+10. **Landing** (`/`) - Marketing homepage ✅
+
+## Known Limitations & Design Decisions
+
+**By Design (Demo Mode):**
+- No backend/API integration
 - Data doesn't persist across refreshes
-- No actual authentication/authorization (localStorage mock)
-- Payments page has Record Payment/Send Reminder placeholders
-- Customers, Analytics, Settings pages are placeholder shells
-- No image upload functionality (modal has placeholder)
-- No actual email/SMS integration for reminders
+- Mock authentication (any credentials work)
+- AI responses are pre-written simulations
+- No actual email/SMS/WhatsApp integration
+- No image upload processing (placeholder only)
+
+**Technical Debt (If Converting to Production):**
+- Would need backend API integration
+- Database for data persistence
+- Real authentication system
+- Actual AI integration (OpenAI, Claude, etc.)
+- File upload handling
+- Email/SMS service integration
+- Payment gateway integration
