@@ -7,6 +7,7 @@ import TopBar from "@/components/dashboard/topbar"
 import MobileSidebar from "@/components/dashboard/mobile-sidebar"
 import { DemoBanner } from "@/components/demo-banner"
 import { DemoControls } from "@/components/demo-controls"
+import { AIAssistant } from "@/components/ai-assistant"
 
 export default function DashboardLayout({
   children,
@@ -66,6 +67,9 @@ export default function DashboardLayout({
 
       {/* Demo Controls (Cmd+Shift+D) */}
       <DemoControls />
+
+      {/* AI Assistant */}
+      <AIAssistant />
     </div>
   )
 }
