@@ -6,6 +6,7 @@ import { X, Send, Sparkles, MessageCircle, Loader2 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { getAIResponse, getContextualQuestions } from "@/lib/ai-knowledge-base"
 import { toast } from "sonner"
+import ReactMarkdown from "react-markdown"
 
 interface Message {
   id: string
@@ -202,9 +203,28 @@ Or click on any of the suggested questions below!`,
                               : "bg-white text-slate-900 rounded-tl-sm shadow-sm"
                           }`}
                         >
-                          <p className="text-sm whitespace-pre-line">
-                            {message.content}
-                          </p>
+                          {message.type === "user" ? (
+                            <p className="text-sm whitespace-pre-line">
+                              {message.content}
+                            </p>
+                          ) : (
+                            <div className="text-sm prose prose-sm max-w-none prose-headings:mt-2 prose-headings:mb-1 prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0">
+                              <ReactMarkdown
+                                components={{
+                                  p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                                  strong: ({ children }) => <strong className="font-semibold text-slate-900">{children}</strong>,
+                                  ul: ({ children }) => <ul className="list-disc list-inside space-y-1 my-2">{children}</ul>,
+                                  ol: ({ children }) => <ol className="list-decimal list-inside space-y-1 my-2">{children}</ol>,
+                                  li: ({ children }) => <li className="text-slate-700">{children}</li>,
+                                  h1: ({ children }) => <h1 className="text-base font-bold mt-3 mb-2">{children}</h1>,
+                                  h2: ({ children }) => <h2 className="text-base font-bold mt-3 mb-2">{children}</h2>,
+                                  h3: ({ children }) => <h3 className="text-sm font-semibold mt-2 mb-1">{children}</h3>,
+                                }}
+                              >
+                                {message.content}
+                              </ReactMarkdown>
+                            </div>
+                          )}
                         </div>
                         <p className="text-xs text-slate-500 mt-1 px-2">
                           {message.timestamp.toLocaleTimeString([], {
